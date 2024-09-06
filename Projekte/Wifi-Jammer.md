@@ -8,4 +8,6 @@
 ## Probe for Networks Around
 
 ## Deauthentication Attack
-  ### Airplay-ng
+  ### airplay-ng
+  ### airmon-ng
+  ### airodump-ng
