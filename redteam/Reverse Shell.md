@@ -38,3 +38,9 @@ Die Fehlermeldung wird durch das Antimalware Scan Interface (kurz. AMSI) aufgeru
 - VBA-Makros in Office
 
 AMSI ist kein unbekanntes System, weshalb es einigen Anwendern gelungen einen Bypass zu erschaffen. Dazu wird die `amsi.dll` mit dem Ziel manipuliert, dass bosthafter Code als sauber zu indentifiziert wird.    
+
+---
+28.01.: Code angepasst vom Server -> Upload zum Webserver mit 
+```
+curl -X POST -F "file=@C:/Users/admin/Desktop/screenshot.png" http://127.0.0.1:5000/upload
+```
