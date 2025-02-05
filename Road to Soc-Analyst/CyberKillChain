@@ -1,0 +1,29 @@
+# Incident Handling
+Incident handling beinhaltet nicht nur Icidents, bei dem Angreifer versuchen in ein System einzudringen. Dazu zählen auch:
++ Angriffe von Innen
++ Verfügbarkeitsprobleme
++ Datenverlust (Löschen von Dateien)
+
+Ein sorgfältiger Incident Handling Plan sollte verschiedene Arten von Icidents abdecken und dafür sorgen, dass das Unternehmen so schnell wie möglich in den "normalen" Zustand gelangt. Das bedeutet, dass hier die Schritte vor, während und nach einem Incident von wichtiger Relevanz sind. Ein weitgenutzter Standard ist der [NIST's Computer Security Incident Handling Guide](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf).
+
+# Cyber Kill Chain
+Folgend wird das Vorgehen eines Angreifers gezeigt. Die Cyber Kill Chain besteht aus sieben verschiedenen Schritten:
+![Quelle: Hackthebox](https://github.com/user-attachments/assets/eebca75f-450d-4b85-9f40-7bc0d88dc617)
+
+## 1. Recon
+Die Phase, in dem der Angreifer sein Ziel auswählt und nützliche Information über das Opfer sammelt. Bei der passiven Suche, durchforscht der Angreifer Internetseiten, wie LinkedIn, oder Instagram, aber auch Dokumentation der gezielten Organisation. So macht wird dem Angreifer ein Einblick in die genutzen Technologien ermöglicht. Zum Beispiel:
+  + Genutztes Antivirus Programm
+  + Betriebssystem
+  + Netzwerktechnologien
+
+Er kann noch einen Schritt weiter gehen und Webapplikation, oder IP-Adressen der Organistation auf Auffälligkeiten scannen.
+
+## 2. Weaponize
+Dér Angreifer bereitet eine Schadesoftware (Malware) vor. Optimalerweise fliegt die Software unter dem Radar und wird nicht vom Antivirusprogramm, oder ähnlichem erkannt. Er erzielt damit, Remote Access auf das System zu bekommen. Die Schadsoftware soll selbst nach einem Neustart persistent sein und die Fähigkeit haben, neue Software aufzuspielen.
+
+## 3. Deliver
+
+## 4. Exploit
+## 5. Install
+## 6. C&C
+## 7. Action
