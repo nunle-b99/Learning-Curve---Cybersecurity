@@ -1,3 +1,6 @@
+::QUELLEN https://superuser.com/questions/1256951/how-do-i-extract-the-ipv4-ip-addresses-from-the-output-of-ipconfig-and-then-fil
+::QUELLEN https://stackoverflow.com/questions/43876891/given-ip-address-and-netmask-how-can-i-calculate-the-subnet-range-using-bash
+
 @echo off
 
 setlocal
